@@ -6,8 +6,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import emporium.abstractclass.Product;
 import emporium.interfaces.EmporiumMethod;
-import emporium.interfaces.SpaceWord;
 
 public class Method implements EmporiumMethod {
 	
@@ -19,10 +19,9 @@ public class Method implements EmporiumMethod {
 	public double calculateEmporiumValue() {
 				
 		String line;
-		int quantity = 0;
-		double price = 0, sum = 0;
-		
-		
+		int quantity;
+		double price, sum = 0;
+
 		try {
 			
 			reader = new BufferedReader(new FileReader(Constants.FILE));
@@ -111,60 +110,7 @@ public class Method implements EmporiumMethod {
 	public void seeEmporium(boolean condition, String search) {
 
 		String line;
-		boolean isContains = true;
-		
-		SpaceWord spaceWord = new SpaceWord() {
-		
-			@Override
-			public String spaceWord(String word) {
-				
-				String emptySpace = "";
-				
-				if (word.length() == 1) {
-
-					for (int x = 0; x <= Constants.LENGTH_STRING_DU - word.length(); x++) {
-						emptySpace += " ";
-					}
-					
-				} else {
-					
-					for (int y = 0; y <= Constants.LENGTH_STRING - word.length(); y++) {
-						emptySpace += " ";
-					}
-				}
-				
-				return emptySpace;
-			}
-			
-			
-			@Override
-			public String spaceWord(int quantity) {
-				
-				String emptySpace = "";
-				String quantityToString = Integer.toString(quantity);
-				
-				for(int x = 0; x <= Constants.LENGTH_INT - quantityToString.length(); x++) {
-					emptySpace = emptySpace + " ";
-				}
-				
-				return emptySpace;
-			}
-			
-			
-			@Override
-			public String spaceWord(double price) {
-
-				String emptySpace = "";
-				String priceToString = Double.toString(price);
-				
-				for(int x = 0; x <= Constants.LENGTH_FLOAT - priceToString.length(); x++) {
-					emptySpace = emptySpace + " ";
-				}
-				
-				return emptySpace;
-			}
-		};
-		
+		boolean isContains = true;		
 
 		try {
 
@@ -177,12 +123,12 @@ public class Method implements EmporiumMethod {
 		
 		try {
 			
-			System.out.println("Name             Dep.      Unit      Cod              Quantity     Price        Characteristic");
-			System.out.println("----------------------------------------------------------------------------------------------");
+			System.out.println("Name             Dep.      Unit      Cod              Quantity         Price            Characteristic");
+			System.out.println("------------------------------------------------------------------------------------------------------");
 			
 			while ((line = reader.readLine()) != null) {
 				
-				if (condition || (line.indexOf(search) != -1)) {
+				if (condition || (line.contains(search))) {
 					
 					String[] splits = line.split(";");
 
@@ -194,12 +140,12 @@ public class Method implements EmporiumMethod {
 					int quantity = Integer.parseInt(splits[5]);
 					double price = Double.parseDouble(splits[6]);
 
-					System.out.println(name + spaceWord.spaceWord(name) + department + spaceWord.spaceWord(department)
-							+ unit + spaceWord.spaceWord(unit) + cod + spaceWord.spaceWord(cod) + quantity
-							+ spaceWord.spaceWord(quantity) + price + spaceWord.spaceWord(price) + characteristic
-							+ spaceWord.spaceWord(characteristic));
+					System.out.println(name + spaceWord(name) + department + spaceWord(department)
+							+ unit + spaceWord(unit) + cod + spaceWord(cod) + quantity
+							+ spaceWord(quantity) + price + spaceWord(price) + characteristic
+							+ spaceWord(characteristic));
 					System.out.println(
-							"----------------------------------------------------------------------------------------------");
+							"------------------------------------------------------------------------------------------------------");
 					isContains = false;
 				}
 			}
@@ -224,43 +170,13 @@ public class Method implements EmporiumMethod {
 
 	}
 	
-
-	@Override
-	public void writeProduct(String name, String department, String unit, String cod,
-											String characteristic, int quantity, double price) {
-
-		try {
-
-			writer = new FileWriter(Constants.FILE, true);
-			writer.write(name + ";" + department + ";" + unit + ";" + cod + ";" + characteristic
-					+ ";" + quantity + ";" + price + "\r\n");
-			
-			System.out.println("Product insert correctly.");
-			System.out.println();
-
-		} catch (IOException pd) {
-			pd.printStackTrace();
-
-		} finally {
-
-			try {
-
-				writer.close();
-
-			} catch (IOException pd) {
-				pd.printStackTrace();
-			}
-		}
-		
-	}
-	
 	
 	@Override
 	public void addSellProduct(String toSearch, int quantityAddSell, boolean condition) {
 		
-		String name = null, deparment = null, unit = null, cod = null, characteristic = null, line;
-		int quantity = 0;
-		double price = 0;
+		String name, department, unit, cod, characteristic, line;
+		int quantity;
+		double price;
 		
 		boolean isContains = true;
 		
@@ -282,13 +198,16 @@ public class Method implements EmporiumMethod {
 				String[] splits = line.split(";");
 				
 				name = splits[0];
-				deparment = splits[1];
+				department = splits[1];
 				unit = splits[2];
 				cod = splits[3];
 				characteristic = splits[4];
 				quantity = Integer.parseInt(splits[5]);
 				price = Double.parseDouble(splits[6]);
-				
+
+				final String str = name + ";" + department + ";" + unit + ";" + cod + ";" + characteristic
+						+ ";" + quantity + ";" + price + "\r\n";
+
 				if (cod.equals(toSearch)) {
 					
 					isContains = false;
@@ -297,8 +216,7 @@ public class Method implements EmporiumMethod {
 						
 						if (quantityAddSell > quantity) {
 							
-							writer.write(name + ";" + deparment + ";" + unit + ";" + cod + ";" + characteristic 
-									+ ";" + quantity + ";" + price + "\r\n");
+							writer.write(str);
 							System.out.println("Quantity not available.");
 							
 						} else if (quantityAddSell == quantity) {
@@ -307,7 +225,7 @@ public class Method implements EmporiumMethod {
 						} else {
 							
 							int newQuantity = quantity - quantityAddSell;
-							writer.write(name + ";" + deparment + ";" + unit + ";" + cod + ";" + characteristic 
+							writer.write(name + ";" + department + ";" + unit + ";" + cod + ";" + characteristic
 									+ ";" + newQuantity + ";" + price + "\r\n");
 							System.out.println("Product sold successfully.");
 						}
@@ -317,21 +235,19 @@ public class Method implements EmporiumMethod {
 						if (quantityAddSell < 0 || quantityAddSell > Constants.MAX_QUANTITY) {
 							
 							System.out.println("Quantity not possible to add.");
-							writer.write(name + ";" + deparment + ";" + unit + ";" + cod + ";" + characteristic 
-									+ ";" + quantity + ";" + price + "\r\n");
+							writer.write(str);
 							
 						} else {
 							
 							int newQuantity = quantityAddSell + quantity;
-							writer.write(name + ";" + deparment + ";" + unit + ";" + cod + ";" + characteristic 
+							writer.write(name + ";" + department + ";" + unit + ";" + cod + ";" + characteristic
 									+ ";" + newQuantity + ";" + price + "\r\n");
 							System.out.println("Quantity add successfully.");
 						}
 					}
 					
 				} else {
-					writer.write(name + ";" + deparment + ";" + unit + ";" + cod + ";" + characteristic + ";"
-							+ quantity + ";" + price + "\r\n");
+					writer.write(str);
 				}
 			}
 			
@@ -348,7 +264,7 @@ public class Method implements EmporiumMethod {
 				
 				reader.close();
 				writer.close();
-				
+
 				Constants.FILE.delete();
 				Constants.NEW_FILE.renameTo(Constants.FILE);
 
@@ -357,6 +273,52 @@ public class Method implements EmporiumMethod {
 			}
 		}
 		
+	}
+
+
+	@Override
+	public void writeProducts(Product product) {
+
+		try {
+
+			writer = new FileWriter(Constants.FILE, true);
+			writer.write(product.getProductName() + ";" + product.getProductDepartment() + ";" + product.getProductUnit() 
+							+ ";" + product.getProductCod() + ";" + product.getProductCharacteristic()
+							+ ";" + product.getProductQuantity() + ";" + product.getProductPrice() + "\r\n");
+			
+			System.out.println("Product insert correctly.");
+			System.out.println();
+
+		} catch (IOException pd) {
+			pd.printStackTrace();
+
+		} finally {
+
+			try {
+
+				writer.close();
+
+			} catch (IOException pd) {
+				pd.printStackTrace();
+			}
+		}
+		
+	}
+
+
+	@Override
+	public String spaceWord(Object obj) {
+		
+		StringBuilder emptySpace = new StringBuilder();
+		
+		if (obj.toString().length() == 1) {
+			emptySpace.append(" ".repeat(Math.max(0, Constants.LENGTH_STRING_DU - obj.toString().length() + 1)));
+			
+		} else {
+			emptySpace.append(" ".repeat(Math.max(0, Constants.LENGTH - obj.toString().length() + 1)));
+		}
+		
+		return emptySpace.toString();
 	}
 	
 }

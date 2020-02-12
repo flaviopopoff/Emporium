@@ -73,7 +73,7 @@ public abstract class Product {
 	
 	public void setProductCod(String productCod) {
 
-		if (productCod.length() < 8 || productCod.length() > 8) {
+		if (productCod.length() != 8) {
 
 			System.out.println("Cod not correct.");
 			System.out.println();

@@ -3,18 +3,12 @@ package emporium.classes;
 import java.util.Scanner;
 
 import emporium.abstractclass.Product;
-import emporium.classes.Constants;
-import emporium.classes.Method;
-import emporium.enumerations.Department;
-import emporium.enumerations.Unit;
 
 public class Emporium extends Product {
 
-	private static Scanner input;
-
 	public static void main(String[] args) {
-		
-		input = new Scanner(System.in);
+
+		Scanner input = new Scanner(System.in);
 		boolean end = true;
 
 		Emporium product = new Emporium();
@@ -31,15 +25,15 @@ public class Emporium extends Product {
 		
 		do {
 
-			System.out.println("---------------------------------");
-			System.out.println("| [0] Ends program.             |");
-			System.out.println("| [1] Add product.              |");
-			System.out.println("| [2] Calculate emporium value. |");
-			System.out.println("| [3] Emporium list.            |");
-			System.out.println("| [4] Search product.           |");
-			System.out.println("| [5] Sell product.             |");
-			System.out.println("| [6] Add quantity to product.  |");
-			System.out.println("---------------------------------");
+			System.out.println("------------------------------------");
+			System.out.println("|| [0] Ends program.              ||");
+			System.out.println("|| [1] Add product.               ||");
+			System.out.println("|| [2] Calculate emporium value.  ||");
+			System.out.println("|| [3] Emporium list.             ||");
+			System.out.println("|| [4] Search product.            ||");
+			System.out.println("|| [5] Sell product.              ||");
+			System.out.println("|| [6] Add quantity to product.   ||");
+			System.out.println("------------------------------------");
 
 			System.out.print("Option: ");
 			String choice = input.nextLine();
@@ -72,15 +66,15 @@ public class Emporium extends Product {
 				System.out.println();
 
 				
-				System.out.println(Department.A.toString() + "       " + Department.P.toString());
-				System.out.println(Department.F.toString() + "  " + Department.S.toString());
-				System.out.println(Department.O.toString());
+				System.out.println("[F] Feed.       [P] Plants.");
+				System.out.println("[M] Metalware.  [S] Sport.");
+				System.out.println("[O] Other.");
 				Constants.isTrue = true;
 				String department;
 
 				do {
 
-					System.out.print("Deparment: ");
+					System.out.print("Department: ");
 					department = input.nextLine().toUpperCase();
 					product.setProductDepartment(department);
 
@@ -90,8 +84,8 @@ public class Emporium extends Product {
 				System.out.println();
 
 				
-				System.out.println(Unit.M.toString() + "   " + Unit.L.toString());
-				System.out.println(Unit.U.toString() + "    " + Unit.K.toString());
+				System.out.println("[M] Meter.   [L] Liter.");
+				System.out.println("[U] Unit.    [K] Kilogram.");
 				
 				Constants.isTrue = true;
 				String unit;
@@ -124,7 +118,7 @@ public class Emporium extends Product {
 						System.out.println();
 					}
 
-				} while (Constants.isTrue || (method.containsCod(cod) == true));
+				} while (Constants.isTrue || (method.containsCod(cod)));
 
 				System.out.println("Cod of product: " + product.getProductCod() + ".");
 				System.out.println();
@@ -137,8 +131,7 @@ public class Emporium extends Product {
 
 					System.out.println("Nothing.");
 					System.out.println();
-					characteristic = null;
-					product.setProductCharacteristic(characteristic);
+					product.setProductCharacteristic(null);
 
 				} else {
 
@@ -148,7 +141,7 @@ public class Emporium extends Product {
 				}
 
 				Constants.isTrue = true;
-				int quantity = 0;
+				int quantity;
 
 				do {
 
@@ -158,7 +151,7 @@ public class Emporium extends Product {
 						quantity = input.nextInt();
 						product.setProductQuantity(quantity);
 
-					} catch (Exception pd) {
+					} catch (Exception ignored) {
 					}
 					
 					input.nextLine();
@@ -169,7 +162,7 @@ public class Emporium extends Product {
 				System.out.println();
 
 				Constants.isTrue = true;
-				double price = 0;
+				double price;
 
 				do {
 
@@ -179,7 +172,7 @@ public class Emporium extends Product {
 						price = input.nextDouble();
 						product.setProductPrice(price);
 
-					} catch (Exception pd) {
+					} catch (Exception ignored) {
 					}
 
 					input.nextLine();
@@ -197,7 +190,7 @@ public class Emporium extends Product {
 				case "y":
 				case "Y":
 					
-					method.writeProduct(name, department, unit, cod, characteristic, quantity, price);
+					method.writeProducts(product);
 					break;
 					
 				default:
@@ -253,7 +246,7 @@ public class Emporium extends Product {
 					System.out.print("Enter the cod of the product you want to sell: ");
 					toSearch = input.nextLine();
 
-				} while (toSearch.length() < 8 || toSearch.length() > 8);
+				} while (toSearch.length() != 8);
 				
 				
 				int quantitySell = 0;
@@ -265,7 +258,7 @@ public class Emporium extends Product {
 						System.out.print("Quantity to sell: ");
 						quantitySell = input.nextInt();
 
-					} catch (Exception pd) {
+					} catch (Exception ignored) {
 					}
 					
 					input.nextLine();
@@ -287,7 +280,7 @@ public class Emporium extends Product {
 					System.out.print("Cod of the product to be supplied: ");
 					code = input.nextLine();
 
-				} while (code.length() < 8 || code.length() > 8);
+				} while (code.length() != 8);
 				
 				
 				int quantityAdd = 0;
@@ -299,7 +292,7 @@ public class Emporium extends Product {
 						System.out.print("Quantity to supplied: ");
 						quantityAdd = input.nextInt();
 
-					} catch (Exception pd) {
+					} catch (Exception ignored) {
 					}
 					
 					input.nextLine();
