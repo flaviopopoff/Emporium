@@ -1,8 +1,10 @@
 package emporium.abstractclass;
 
 import emporium.classes.Constants;
+import emporium.interfaces.IProduct;
 
-public abstract class Product {
+
+public abstract class Product implements IProduct {
 	
 	private String productName;
 	private String productDepartment;
@@ -11,7 +13,8 @@ public abstract class Product {
 	private String productCharacteristic;
 	private int productQuantity;
 	private double productPrice;
-	
+
+
 	public void setProductName(String productName) {
 
 		if (productName.length() > 3 & productName.length() < 20) {
@@ -133,5 +136,11 @@ public abstract class Product {
 	public double getProductPrice() {
 		return productPrice;
 	}
-	
+
+
+	@Override
+	public String toString() {
+		return productName + ";" + productDepartment + ";" + productUnit + ";" + productCod +
+				";" + productCharacteristic + ";" + productQuantity + ";" + productPrice + "\r\n";
+	}
 }

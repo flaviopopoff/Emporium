@@ -6,6 +6,7 @@ import emporium.abstractclass.Product;
 
 public class Emporium extends Product {
 
+
 	public static void main(String[] args) {
 
 		Scanner input = new Scanner(System.in);

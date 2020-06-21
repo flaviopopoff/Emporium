@@ -282,9 +282,7 @@ public class Method implements EmporiumMethod {
 		try {
 
 			writer = new FileWriter(Constants.FILE, true);
-			writer.write(product.getProductName() + ";" + product.getProductDepartment() + ";" + product.getProductUnit() 
-							+ ";" + product.getProductCod() + ";" + product.getProductCharacteristic()
-							+ ";" + product.getProductQuantity() + ";" + product.getProductPrice() + "\r\n");
+			writer.write(product.toString());
 			
 			System.out.println("Product insert correctly.");
 			System.out.println();
@@ -307,7 +305,7 @@ public class Method implements EmporiumMethod {
 
 
 	@Override
-	public String spaceWord(Object obj) {
+	public <T> String spaceWord(T obj) {
 		
 		StringBuilder emptySpace = new StringBuilder();
 		
